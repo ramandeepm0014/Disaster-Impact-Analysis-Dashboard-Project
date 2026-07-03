@@ -168,15 +168,13 @@ http://127.0.0.1:5000
 
 ## 📸 Screenshots
 
-Add screenshots of:
+<img width="1864" height="867" alt="image" src="https://github.com/user-attachments/assets/eceb5768-bee4-423a-9aaf-2b461994a4a3" />
 
-- Home Page
-- Dashboard
-- KPI Cards
-- Charts
-- Disaster Map
-- Filter Panel
-- Data Table
+<img width="1824" height="889" alt="image" src="https://github.com/user-attachments/assets/0e6335e2-a105-49ef-91ad-84523b757427" />
+
+<img width="1832" height="887" alt="image" src="https://github.com/user-attachments/assets/ab48298c-027e-4a60-af4b-2b1a60ab7a4d" />
+
+<img width="1857" height="885" alt="image" src="https://github.com/user-attachments/assets/c7173ffa-8aac-46d5-b06b-9f6dc8552918" />
 
 
 ## 🚀 Future Enhancements
