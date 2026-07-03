@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Disaster Impact Analysis Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">⚠️</div>
+            <div>
+                <h2>DisasterLens</h2>
+                <span>Impact Intelligence</span>
+            </div>
+        </div>
+        <nav>
+            <a href="#overview" class="active">Overview</a>
+            <a href="#analytics">Analytics</a>
+            <a href="#map-section">Risk Map</a>
+            <a href="#records">Records</a>
+        </nav>
+        <div class="sidebar-card">
+            <p>Human Impact Focus</p>
+            <strong>Deaths • Injuries • Affected Population</strong>
+            <span>This dashboard converts disaster data into clear decisions for relief planning.</span>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <section class="hero" id="overview">
+            <div>
+                <p class="eyebrow">Professional Data Analytics Website</p>
+                <h1>Disaster Impact Analysis Dashboard</h1>
+                <p class="hero-text">
+                    Track disaster severity, human loss, economic damage, funding gap, and recovery pressure from the uploaded dataset.
+                </p>
+            </div>
+            <div class="hero-panel">
+                <span>Dataset Coverage</span>
+                <strong>{{ filters.min_year }} – {{ filters.max_year }}</strong>
+                <p>Interactive filters and charts update automatically.</p>
+            </div>
+        </section>
+
+        <section class="filters-card">
+            <div class="filter-group">
+                <label>Country</label>
+                <select id="country">
+                    <option>All</option>
+                    {% for item in filters.countries %}<option>{{ item }}</option>{% endfor %}
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>City</label>
+                <select id="city">
+                    <option>All</option>
+                    {% for item in filters.cities %}<option>{{ item }}</option>{% endfor %}
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Disaster Type</label>
+                <select id="type">
+                    <option>All</option>
+                    {% for item in filters.types %}<option>{{ item }}</option>{% endfor %}
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Severity</label>
+                <select id="severity">
+                    <option>All</option>
+                    {% for item in filters.severities %}<option>{{ item }}</option>{% endfor %}
+                </select>
+            </div>
+            <div class="filter-group mini">
+                <label>From Year</label>
+                <input type="number" id="start_year" value="{{ filters.min_year }}" min="{{ filters.min_year }}" max="{{ filters.max_year }}" />
+            </div>
+            <div class="filter-group mini">
+                <label>To Year</label>
+                <input type="number" id="end_year" value="{{ filters.max_year }}" min="{{ filters.min_year }}" max="{{ filters.max_year }}" />
+            </div>
+            <button id="resetBtn">Reset</button>
+        </section>
+
+        <section class="kpi-grid">
+            <div class="kpi-card"><span>Total Disasters</span><strong id="total_disasters">0</strong><p>Events recorded</p></div>
+            <div class="kpi-card danger"><span>Total Deaths</span><strong id="deaths">0</strong><p>Human loss</p></div>
+            <div class="kpi-card warning"><span>Total Injured</span><strong id="injured">0</strong><p>Medical impact</p></div>
+            <div class="kpi-card"><span>Affected Population</span><strong id="affected">0</strong><p>People impacted</p></div>
+            <div class="kpi-card"><span>Economic Damage</span><strong>$<b id="economic_damage_b">0</b>B</strong><p>Total estimated loss</p></div>
+            <div class="kpi-card"><span>Relief Funds</span><strong>$<b id="relief_funds_m">0</b>M</strong><p>Released support</p></div>
+            <div class="kpi-card"><span>Avg Recovery</span><strong><b id="avg_recovery_days">0</b> days</strong><p>Recovery pressure</p></div>
+            <div class="kpi-card success"><span>Avg Coverage</span><strong><b id="avg_relief_coverage">0</b>%</strong><p>Relief coverage</p></div>
+        </section>
+
+        <section class="insight-banner">
+            <div>
+                <h3>Purpose of this data</h3>
+                <p>
+                    The motive of this dataset is to understand where disasters create the highest human suffering, which locations need faster recovery support, and where relief funding is not enough compared with economic damage.
+                </p>
+            </div>
+            <div class="badge">Decision Support</div>
+        </section>
+
+        <section class="chart-grid" id="analytics">
+            <article class="chart-card large"><h3>Economic Damage Trend</h3><canvas id="yearlyDamageChart"></canvas></article>
+            <article class="chart-card"><h3>Disasters by Type</h3><canvas id="typeChart"></canvas></article>
+            <article class="chart-card"><h3>Severity Distribution</h3><canvas id="severityChart"></canvas></article>
+            <article class="chart-card"><h3>Deaths by Disaster Type</h3><canvas id="deathsChart"></canvas></article>
+            <article class="chart-card"><h3>Most Affected Cities</h3><canvas id="cityChart"></canvas></article>
+            <article class="chart-card large"><h3>Funding Gap by Disaster Type</h3><canvas id="fundingGapChart"></canvas></article>
+        </section>
+
+        <section class="map-card" id="map-section">
+            <div class="section-title">
+                <div>
+                    <p class="eyebrow">Location Intelligence</p>
+                    <h2>Disaster Risk Map</h2>
+                </div>
+                <span>Markers show high-impact records</span>
+            </div>
+            <div id="map"></div>
+        </section>
+
+        <section class="table-card" id="records">
+            <div class="section-title">
+                <div>
+                    <p class="eyebrow">Dataset View</p>
+                    <h2>Latest Filtered Records</h2>
+                </div>
+                <span>Showing first 100 rows</span>
+            </div>
+            <div class="table-wrap">
+                <table id="recordsTable"></table>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
