@@ -50,7 +50,6 @@ The Disaster Impact Analysis Website is an interactive web application developed
 
 ## 📁 Project Structure
 
----
 Disaster-Impact-Analysis-Website/
 │
 ├── app.py
@@ -68,7 +67,7 @@ Disaster-Impact-Analysis-Website/
 │   ├── about.html
 │   └── contact.html
 └── README.md
-```
+
 
 
 ## 📊 Dashboard Modules
